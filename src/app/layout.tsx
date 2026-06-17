@@ -2,11 +2,49 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "@/styles/forja/index.css";
 import { ForjaShell } from "@/components/landing/ForjaShell";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  SITE_LOCALE,
+} from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "FORJA — Forja tu físico. Domina el sistema.",
-  description:
-    "Protocolos sin relleno, guías tácticas y una comunidad que entrena en serio. E-books de entrenamiento, estética y nutrición.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: [
+    "fitness",
+    "hipertrofia",
+    "e-books fitness",
+    "entrenamiento",
+    "nutrición",
+    "lookmaxxing",
+    "FORJA",
+    "comunidad fitness",
+  ],
+  authors: [{ name: SITE_NAME }],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: SITE_LOCALE,
+    url: SITE_URL,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export default function RootLayout({
