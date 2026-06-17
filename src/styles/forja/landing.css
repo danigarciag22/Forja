@@ -495,6 +495,17 @@
   .lp-pdp__value-col { gap: var(--space-6); }
 }
 
+/* ---- Mobile navbar: keep the "¡Únete al Culto!" bubble fully on-screen ---- */
+@media (max-width: 560px) {
+  .lp-nav { padding: var(--space-3) var(--space-4); gap: var(--space-3); }
+  .lp-logo { font-size: 1.7rem; }
+  .lp-nav .forja-bubble { font-size: 1.05rem; padding: .5em .9em .6em; }
+}
+@media (max-width: 380px) {
+  .lp-logo { font-size: 1.5rem; }
+  .lp-nav .forja-bubble { font-size: .9rem; }
+}
+
 /* ============================================================
    404 — SPLASH PAGE ("Te saliste del protocolo")
    Full-bleed impact panel: speed-lines + halftone shock burst,
@@ -503,7 +514,7 @@
 .lp-404 {
   position: relative; overflow: hidden;
   min-height: calc(100dvh - 92px);
-  display: grid; place-items: center;
+  display: flex; align-items: center; justify-content: center;
   background: var(--paper); color: var(--ink);
   padding: var(--space-8) var(--space-6);
 }
@@ -520,7 +531,7 @@
           mask-image: radial-gradient(100% 100% at 50% 50%, transparent 28%, #000 100%);
 }
 .lp-404__inner {
-  position: relative; z-index: 1; max-width: 760px; width: 100%;
+  position: relative; z-index: 1; max-width: 760px; width: 100%; min-width: 0;
   display: flex; flex-direction: column; align-items: center; text-align: center;
   gap: var(--space-5);
 }
@@ -537,13 +548,21 @@
 .lp-404__title {
   font-family: var(--font-body); font-weight: 700; text-transform: uppercase;
   letter-spacing: .08em; font-size: clamp(1.3rem, 3.4vw, 2.1rem); margin: 0;
+  max-width: 100%; overflow-wrap: anywhere;
 }
 .lp-404__body {
   font-family: var(--font-body); font-size: 1.02rem; line-height: 1.55;
   max-width: 54ch; margin: 0; opacity: .85;
 }
-.lp-404__cta { margin-top: var(--space-3); }
+/* CTA may wrap on narrow screens (forja-btn is nowrap by default) so it never
+   forces the centered column wider than the viewport. */
+.lp-404__cta { margin-top: var(--space-3); max-width: 100%; white-space: normal; }
 
 @media (max-width: 600px) {
+  .lp-404 { padding: var(--space-7) var(--space-5); min-height: calc(100dvh - 78px); }
+  .lp-404__inner { gap: var(--space-4); }
   .lp-404__code { text-shadow: 6px 6px 0 var(--ink); }
+  .lp-404__title { font-size: 1.1rem; letter-spacing: .05em; }
+  .lp-404__body { font-size: .92rem; max-width: 100%; }
+  .lp-404__cta { font-size: 1.15rem; padding: .7em 1.2em; line-height: 1.1; }
 }

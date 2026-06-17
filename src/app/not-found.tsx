@@ -22,10 +22,10 @@ export default function NotFound() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="lp-img-mono"
-                src="/assets/titan-hero.png"
+                src="/assets/titan-404.png"
                 alt="El Titán confundido, mirando un mapa roto"
                 width={1536}
-                height={2752}
+                height={2754}
                 loading="eager"
               />
             </div>

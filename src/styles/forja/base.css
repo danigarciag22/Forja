@@ -19,6 +19,9 @@ body {
   font-weight: var(--fw-regular);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* prevent accidental horizontal scroll (e.g. wide nav CTA on small screens)
+     without creating a scroll container that would break position:sticky */
+  overflow-x: clip;
 }
 
 ::selection {
