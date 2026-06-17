@@ -126,7 +126,7 @@ export function Products() {
                   <h3 className="lp-cover__title">{b.title}</h3>
                   <div className="lp-cover__foot">
                     <span className="lp-cover__price">{b.price}</span>
-                    <Button variant="outline" size="md" as="a" href="/producto">
+                    <Button variant="outline" size="md" as="a" href={`/producto/${b.slug}`}>
                       Adquirir
                     </Button>
                   </div>
