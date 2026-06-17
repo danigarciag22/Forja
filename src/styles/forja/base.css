@@ -1,0 +1,50 @@
+/* ============================================================
+   FORJA — BASE / RESET
+   Minimal, opinionated. Sets the paper, the ink, the default
+   body voice, and selection styling.
+   ============================================================ */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  font-weight: var(--fw-regular);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Display / heading defaults */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+  letter-spacing: var(--track-display);
+  margin: 0;
+}
+
+/* Uppercase Space Grotesk label helper */
+.label-mono {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  font-weight: var(--fw-bold);
+  font-size: var(--text-xs);
+}
+
+a { color: inherit; }
+
+img { max-width: 100%; display: block; }

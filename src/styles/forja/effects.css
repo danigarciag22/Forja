@@ -1,0 +1,55 @@
+/* ============================================================
+   FORJA — SURFACE EFFECTS (HALFTONE / SCREENTONE)
+   The only "grey" in the system is an optical illusion built
+   from black dots. Drop these as background utilities or read
+   the vars to build your own.
+   ============================================================ */
+:root {
+  /* Dot screentone — black dots on transparent. Layer over paper. */
+  --halftone-dot: radial-gradient(var(--halftone-ink) 1.6px, transparent 1.7px);
+  --halftone-size-fine: 8px 8px;
+  --halftone-size-base: 12px 12px;
+  --halftone-size-bold: 18px 18px;
+
+  /* Diagonal speed-lines hatch */
+  --hatch-diagonal: repeating-linear-gradient(
+    45deg,
+    var(--ink) 0,
+    var(--ink) 2px,
+    transparent 2px,
+    transparent 9px
+  );
+
+  /* Bold inked stripes (for ribbons / banners) */
+  --stripes-bold: repeating-linear-gradient(
+    -45deg,
+    var(--ink) 0,
+    var(--ink) 14px,
+    var(--paper) 14px,
+    var(--paper) 28px
+  );
+}
+
+/* ---- Reusable surface utility classes ---- */
+.fx-halftone {
+  background-image: var(--halftone-dot);
+  background-size: var(--halftone-size-base);
+}
+.fx-halftone-fine {
+  background-image: var(--halftone-dot);
+  background-size: var(--halftone-size-fine);
+}
+.fx-halftone-bold {
+  background-image: var(--halftone-dot);
+  background-size: var(--halftone-size-bold);
+}
+/* halftone that fades from dense (bottom) to sparse (top) */
+.fx-halftone-fade {
+  background-image: var(--halftone-dot);
+  background-size: var(--halftone-size-base);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 85%);
+          mask-image: linear-gradient(to top, #000 0%, transparent 85%);
+}
+.fx-hatch {
+  background-image: var(--hatch-diagonal);
+}

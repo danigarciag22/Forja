@@ -1,0 +1,12 @@
+/* ============================================================
+   FORJA design system — import order matters.
+   Tokens → base → component CSS → landing/kit layout.
+   Fonts load via <link> in app/layout.tsx (Google CDN).
+   ============================================================ */
+@import "./colors.css";
+@import "./typography.css";
+@import "./spacing.css";
+@import "./effects.css";
+@import "./base.css";
+@import "./components.css";
+@import "./landing.css";

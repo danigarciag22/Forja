@@ -1,0 +1,28 @@
+/* ============================================================
+   FORJA — COLOR SYSTEM
+   Strictly monochrome. Pure black on pure white.
+   No soft greys, no accent hues. Contrast is the whole brand.
+   "Greys" that appear are HALFTONE illusions (black dots on
+   white), never flat mid-tones. Use opacity of --ink for any
+   transient muting (placeholders, disabled), never a grey hex.
+   ============================================================ */
+:root {
+  /* --- Base ink & paper --- */
+  --ink: #000000;          /* the only dark */
+  --paper: #ffffff;        /* the only light */
+
+  /* --- Functional aliases (all resolve to ink/paper) --- */
+  --text-strong: var(--ink);
+  --text-on-ink: var(--paper);
+  --surface-paper: var(--paper);
+  --surface-ink: var(--ink);
+  --border-color: var(--ink);
+
+  /* --- Muting via opacity ONLY (never a grey hex) --- */
+  --muted-on-paper: rgba(0, 0, 0, 0.55);   /* placeholders / captions on white */
+  --muted-on-ink: rgba(255, 255, 255, 0.6); /* captions on black */
+  --disabled-veil: rgba(0, 0, 0, 0.35);
+
+  /* --- Halftone ink (the screentone dot color) --- */
+  --halftone-ink: #000000;
+}
