@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Button, Badge, ComicPanel } from "@/components/ds";
 import { openCult } from "@/lib/cult";
 
@@ -37,15 +38,13 @@ export function Hero() {
           </div>
           <ComicPanel weight="frame" className="lp-hero__frame" caption="El Titán">
             <div className="lp-art-slot">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 className="lp-img-mono"
                 src="/assets/titan-hero.png"
                 alt="El Titán — personaje humanoide de FORJA en pose de acción"
-                width={1536}
-                height={2752}
-                loading="eager"
-                fetchPriority="high"
+                fill
+                sizes="(max-width: 900px) 92vw, 45vw"
+                priority
               />
             </div>
           </ComicPanel>

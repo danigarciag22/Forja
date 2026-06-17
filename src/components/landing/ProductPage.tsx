@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Badge, ComicPanel } from "@/components/ds";
 import { FEATURED_SLUG } from "@/lib/products";
@@ -65,15 +66,13 @@ export function ProductPage() {
           <div className="lp-pdp__gallery">
             <ComicPanel weight="frame" className="lp-pdp__hero-frame" caption="Edición física">
               <div className="lp-pdp__hero-img">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   className="lp-img-mono"
                   src={main.src}
                   alt="Mockup del e-book de FORJA en tablet con El Titán"
-                  width={main.w}
-                  height={main.h}
-                  loading="eager"
-                  fetchPriority="high"
+                  fill
+                  sizes="(max-width: 900px) 92vw, 45vw"
+                  priority
                 />
               </div>
             </ComicPanel>
@@ -87,15 +86,13 @@ export function ProductPage() {
                   aria-label={"Vista " + (i + 1)}
                   aria-pressed={i === thumb}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     className="lp-img-mono"
                     src={t.src}
                     alt=""
                     aria-hidden="true"
-                    width={t.w}
-                    height={t.h}
-                    loading="lazy"
+                    fill
+                    sizes="(max-width: 900px) 22vw, 110px"
                   />
                 </button>
               ))}
@@ -210,14 +207,12 @@ export function ProductPage() {
             <div className="lp-pdp__phone">
               <ComicPanel weight="frame" className="lp-pdp__phone-frame" caption="El Sistema">
                 <div className="lp-pdp__phone-img">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     className="lp-img-mono"
                     src="/assets/titan-hero.png"
                     alt="Smartphone mostrando el índice del sistema FORJA"
-                    width={1536}
-                    height={2752}
-                    loading="lazy"
+                    fill
+                    sizes="(max-width: 900px) 60vw, 22vw"
                   />
                 </div>
               </ComicPanel>

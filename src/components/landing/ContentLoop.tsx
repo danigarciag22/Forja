@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ChapterTitle, PlayButton } from "@/components/ds";
 
 type Tile = { kicker: string; title: string; cls: string; href: string };
@@ -35,15 +36,13 @@ export function ContentLoop() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 className="lp-img-mono"
                 src="/assets/titan-video.png"
                 alt=""
                 aria-hidden="true"
-                width={2752}
-                height={1536}
-                loading="lazy"
+                fill
+                sizes="(max-width: 900px) 50vw, 33vw"
               />
               <span className="lp-vignette__veil" aria-hidden="true" />
               <span className="lp-vignette__play">

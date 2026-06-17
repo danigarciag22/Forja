@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { ComicPanel } from "@/components/ds";
@@ -19,14 +20,13 @@ export default function NotFound() {
         <div className="lp-404__inner">
           <ComicPanel weight="frame" className="lp-404__art" caption="Recluta perdido">
             <div className="lp-404__art-img">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 className="lp-img-mono"
                 src="/assets/titan-404.png"
                 alt="El Titán confundido, mirando un mapa roto"
-                width={1536}
-                height={2754}
-                loading="eager"
+                fill
+                sizes="220px"
+                priority
               />
             </div>
           </ComicPanel>

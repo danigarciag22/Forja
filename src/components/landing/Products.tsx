@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { ChapterTitle, ComicPanel, Button, Badge } from "@/components/ds";
 import { CAROUSEL_BOOKS } from "@/lib/products";
@@ -105,15 +106,13 @@ export function Products() {
             >
               <article className="lp-cover">
                 <div className="lp-cover__art">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     className="lp-img-mono"
                     src="/assets/titan-cover.png"
                     alt=""
                     aria-hidden="true"
-                    width={1408}
-                    height={3008}
-                    loading="lazy"
+                    fill
+                    sizes="(max-width: 600px) 60vw, 266px"
                   />
                   <div className="lp-cover__issue">
                     {b.best ? (
