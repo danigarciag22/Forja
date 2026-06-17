@@ -1,14 +1,18 @@
 import { ChapterTitle, PlayButton } from "@/components/ds";
 
-type Tile = { kicker: string; title: string; cls: string };
+type Tile = { kicker: string; title: string; cls: string; href: string };
+
+// Placeholder destinations → real platform homes until per-video links exist.
+const YT = "https://www.youtube.com";
+const IG = "https://www.instagram.com/forjagym.official/";
 
 const tiles: Tile[] = [
-  { kicker: "YouTube · Push Day", title: "Día 1: Rutina de Empuje", cls: "lp-vignette--big" },
-  { kicker: "Reel", title: "Shots antiinflamatorios", cls: "" },
-  { kicker: "Short", title: "Postura en 60s", cls: "" },
-  { kicker: "Carrusel", title: "Mi semana de volumen", cls: "lp-vignette--wide" },
-  { kicker: "YouTube", title: "Lookmaxxing real", cls: "" },
-  { kicker: "Short", title: "Mito: cardio en ayunas", cls: "" },
+  { kicker: "YouTube · Push Day", title: "Día 1: Rutina de Empuje", cls: "lp-vignette--big", href: YT },
+  { kicker: "Reel", title: "Shots antiinflamatorios", cls: "", href: IG },
+  { kicker: "Short", title: "Postura en 60s", cls: "", href: YT },
+  { kicker: "Carrusel", title: "Mi semana de volumen", cls: "lp-vignette--wide", href: IG },
+  { kicker: "YouTube", title: "Lookmaxxing real", cls: "", href: YT },
+  { kicker: "Short", title: "Mito: cardio en ayunas", cls: "", href: YT },
 ];
 
 /** "Transmisiones Recientes": comic-panel grid of mixed vignettes with play overlays. */
@@ -24,7 +28,13 @@ export function ContentLoop() {
 
         <div className="lp-loop__grid">
           {tiles.map((t, i) => (
-            <a key={i} className={"lp-vignette " + t.cls} href="#">
+            <a
+              key={i}
+              className={"lp-vignette " + t.cls}
+              href={t.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="lp-img-mono"

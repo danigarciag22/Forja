@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Input, Button } from "@/components/ds";
 
 const socials = [
-  { slug: "youtube", label: "YouTube" },
-  { slug: "facebook", label: "Facebook" },
-  { slug: "instagram", label: "Instagram" },
-  { slug: "threads", label: "Threads" },
-  { slug: "tiktok", label: "TikTok" },
+  { slug: "youtube", label: "YouTube", url: "https://www.youtube.com" },
+  { slug: "facebook", label: "Facebook", url: "https://www.facebook.com" },
+  { slug: "instagram", label: "Instagram", url: "https://www.instagram.com/forjagym.official/" },
+  { slug: "threads", label: "Threads", url: "https://www.threads.net" },
+  { slug: "tiktok", label: "TikTok", url: "https://www.tiktok.com" },
 ];
 
 const legal = [
@@ -60,7 +60,14 @@ export function Footer() {
         <span className="lp-footer__logo">FORJA</span>
         <nav className="lp-social" aria-label="Redes sociales">
           {socials.map((s) => (
-            <a key={s.slug} href="#" aria-label={s.label} title={s.label}>
+            <a
+              key={s.slug}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              title={s.label}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={"https://cdn.simpleicons.org/" + s.slug + "/ffffff"}
