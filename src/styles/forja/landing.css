@@ -494,3 +494,56 @@
   .lp-pdp__stack-grid { grid-template-columns: 1fr; }
   .lp-pdp__value-col { gap: var(--space-6); }
 }
+
+/* ============================================================
+   404 — SPLASH PAGE ("Te saliste del protocolo")
+   Full-bleed impact panel: speed-lines + halftone shock burst,
+   framed character, comic-SFX "404", rescue CTA. Navbar, no footer.
+   ============================================================ */
+.lp-404 {
+  position: relative; overflow: hidden;
+  min-height: calc(100dvh - 92px);
+  display: grid; place-items: center;
+  background: var(--paper); color: var(--ink);
+  padding: var(--space-8) var(--space-6);
+}
+.lp-404__rays {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .09;
+  background: repeating-conic-gradient(from 0deg at 50% 47%, var(--ink) 0deg .55deg, transparent .55deg 3.4deg);
+  -webkit-mask-image: radial-gradient(120% 95% at 50% 47%, #000 6%, transparent 66%);
+          mask-image: radial-gradient(120% 95% at 50% 47%, #000 6%, transparent 66%);
+}
+.lp-404__tone {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .12;
+  background-image: var(--halftone-dot); background-size: var(--halftone-size-bold);
+  -webkit-mask-image: radial-gradient(100% 100% at 50% 50%, transparent 28%, #000 100%);
+          mask-image: radial-gradient(100% 100% at 50% 50%, transparent 28%, #000 100%);
+}
+.lp-404__inner {
+  position: relative; z-index: 1; max-width: 760px; width: 100%;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: var(--space-5);
+}
+.lp-404__art { width: min(220px, 58vw); transform: rotate(var(--rotate-ccw-2)); }
+.lp-404__art-img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--paper); }
+.lp-404__art-img img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+.lp-404__code {
+  font-family: var(--font-comic); line-height: .8; letter-spacing: .03em; margin: 0;
+  font-size: clamp(6rem, 26vw, 16rem);
+  color: var(--paper);
+  -webkit-text-stroke: clamp(3px, 1.2vw, 7px) var(--ink);
+  text-shadow: 10px 10px 0 var(--ink);
+}
+.lp-404__title {
+  font-family: var(--font-body); font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; font-size: clamp(1.3rem, 3.4vw, 2.1rem); margin: 0;
+}
+.lp-404__body {
+  font-family: var(--font-body); font-size: 1.02rem; line-height: 1.55;
+  max-width: 54ch; margin: 0; opacity: .85;
+}
+.lp-404__cta { margin-top: var(--space-3); }
+
+@media (max-width: 600px) {
+  .lp-404__code { text-shadow: 6px 6px 0 var(--ink); }
+}
