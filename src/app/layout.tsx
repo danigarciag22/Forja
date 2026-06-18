@@ -10,6 +10,11 @@ import {
   SITE_LOCALE,
 } from "@/lib/site";
 
+// Force dynamic rendering app-wide so the per-request CSP nonce (middleware.ts)
+// is stamped onto every page's inline scripts. Without this, statically baked
+// pages ship nonce-less inline scripts that the strict CSP would block.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,

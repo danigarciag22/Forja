@@ -19,6 +19,7 @@ export function Products() {
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
+    let cancelled = false;
     let raf = 0;
     const unit = () => {
       const items = el.querySelectorAll<HTMLElement>(".lp-carousel__item");
@@ -28,6 +29,7 @@ export function Products() {
     };
     let tries = 0;
     const center = () => {
+      if (cancelled) return;
       const u = unit();
       if (u > 0) {
         el.scrollLeft = u;
@@ -49,6 +51,7 @@ export function Products() {
     };
     window.addEventListener("resize", onResize);
     return () => {
+      cancelled = true;
       cancelAnimationFrame(raf);
       el.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
