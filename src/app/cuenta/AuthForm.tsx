@@ -15,6 +15,23 @@ const SOCIALS: { id: Provider; label: string; enabled: boolean }[] = [
   { id: "apple", label: "Apple", enabled: false },
 ];
 
+/** Map common Supabase auth errors to clear Spanish messages. */
+function authErrorMessage(err: unknown, mode: Mode): string {
+  const raw = err instanceof Error ? err.message : "";
+  const m = raw.toLowerCase();
+  if (m.includes("email not confirmed"))
+    return "Confirma tu email antes de entrar (revisa tu correo). Para pruebas, desactiva «Confirm email» en Supabase.";
+  if (m.includes("invalid login credentials")) return "Email o contraseña incorrectos.";
+  if (m.includes("already registered") || m.includes("already been registered"))
+    return "Ese email ya tiene cuenta. Usa «Ya tengo cuenta».";
+  if (m.includes("password")) return raw; // e.g. password too short
+  if (m.includes("provider is not enabled"))
+    return "Ese proveedor no está habilitado en Supabase todavía.";
+  if (m.includes("supabase no configurado") || m.includes("not configured"))
+    return "Auth no configurada: faltan variables NEXT_PUBLIC_SUPABASE_* en este entorno.";
+  return raw || (mode === "login" ? "No se pudo iniciar sesión." : "No se pudo crear la cuenta.");
+}
+
 export function AuthForm({ next }: { next: string }) {
   const [mode, setMode] = useState<Mode>("register");
   const [alias, setAlias] = useState("");
@@ -30,8 +47,8 @@ export function AuthForm({ next }: { next: string }) {
     setBusy(true);
     setError(null);
     setMessage(null);
-    const supabase = getSupabaseBrowser();
     try {
+      const supabase = getSupabaseBrowser();
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -47,14 +64,10 @@ export function AuthForm({ next }: { next: string }) {
         });
         if (error) throw error;
         if (data.session) window.location.href = next;
-        else setMessage("Revisa tu correo para confirmar la cuenta.");
+        else setMessage("Cuenta creada. Revisa tu correo para confirmarla antes de entrar.");
       }
-    } catch {
-      setError(
-        mode === "login"
-          ? "Credenciales incorrectas."
-          : "No se pudo crear la cuenta. ¿Ya existe?",
-      );
+    } catch (err) {
+      setError(authErrorMessage(err, mode));
     } finally {
       setBusy(false);
     }
@@ -65,15 +78,18 @@ export function AuthForm({ next }: { next: string }) {
   async function handleOAuth(provider: Provider, label: string) {
     setBusy(true);
     setError(null);
-    const supabase = getSupabaseBrowser();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
-      },
-    });
-    if (error) {
-      setError(`No se pudo conectar con ${label}.`);
+    try {
+      const supabase = getSupabaseBrowser();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+        },
+      });
+      if (error) throw error;
+      // success → browser redirects to the provider.
+    } catch (err) {
+      setError(`No se pudo conectar con ${label}: ${authErrorMessage(err, "login")}`);
       setBusy(false);
     }
   }
