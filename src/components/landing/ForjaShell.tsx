@@ -35,6 +35,13 @@ export function ForjaShell({ children }: { children: ReactNode }) {
   // class the THEME_INIT script set pre-paint (no flip after hydration).
   const [dark, setDark] = useState<boolean>(readInitialDark);
   const [cultOpen, setCultOpen] = useState(false);
+  // Gate the toggle button on mount: server and first client render both see
+  // mounted=false → identical markup → no hydration mismatch. After mount the
+  // real `dark` paints in. The wrapper theme itself is already correct pre-paint
+  // (THEME_INIT script + lazy-init), so only the toggle's own state defers.
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     try {
@@ -59,7 +66,7 @@ export function ForjaShell({ children }: { children: ReactNode }) {
       >
         {children}
       </div>
-      <ModeToggle dark={dark} onToggle={() => setDark((d) => !d)} />
+      <ModeToggle dark={mounted && dark} onToggle={() => setDark((d) => !d)} />
       <CultModal open={cultOpen} onClose={() => setCultOpen(false)} code="CULTO10" />
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
     </>

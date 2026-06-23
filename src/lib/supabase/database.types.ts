@@ -93,6 +93,87 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          id: string
+          interval: string | null
+          plan: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          id?: string
+          interval?: string | null
+          plan: string
+          status: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          id?: string
+          interval?: string | null
+          plan?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      recent_posts: {
+        Row: {
+          created_at: string
+          external_id: string
+          id: number
+          kind: string | null
+          kicker: string
+          permalink: string
+          platform: string
+          position: number
+          published_at: string | null
+          thumbnail_url: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          external_id: string
+          id?: never
+          kind?: string | null
+          kicker: string
+          permalink: string
+          platform: string
+          position?: number
+          published_at?: string | null
+          thumbnail_url?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          external_id?: string
+          id?: never
+          kind?: string | null
+          kicker?: string
+          permalink?: string
+          platform?: string
+          position?: number
+          published_at?: string | null
+          thumbnail_url?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -113,3 +194,7 @@ export type Database = {
 export type ProductRow = Database["public"]["Tables"]["products"]["Row"]
 export type OrderRow = Database["public"]["Tables"]["orders"]["Row"]
 export type OrderInsert = Database["public"]["Tables"]["orders"]["Insert"]
+export type RecentPostRow = Database["public"]["Tables"]["recent_posts"]["Row"]
+export type RecentPostInsert = Database["public"]["Tables"]["recent_posts"]["Insert"]
+export type SubscriptionRow = Database["public"]["Tables"]["subscriptions"]["Row"]
+export type SubscriptionInsert = Database["public"]["Tables"]["subscriptions"]["Insert"]

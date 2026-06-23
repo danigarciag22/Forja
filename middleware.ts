@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
 /**
  * Content-Security-Policy with a per-request nonce.
@@ -16,7 +17,7 @@ import { NextResponse, type NextRequest } from "next/server";
  */
 const THEME_SCRIPT_HASH = "sha256-KcoSDHFnsrUmJ3qhxNF6e3mOTNpJbqUEjIq6RNLkRGU=";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const isDev = process.env.NODE_ENV !== "production";
   const nonce = btoa(crypto.randomUUID());
 
@@ -25,6 +26,11 @@ export function middleware(request: NextRequest) {
   const scriptSrc = isDev
     ? `'self' 'unsafe-inline' 'unsafe-eval'`
     : `'self' 'nonce-${nonce}' '${THEME_SCRIPT_HASH}'`;
+
+  // Supabase Auth fetches against the project origin (login/refresh/OAuth).
+  const supabaseOrigin = process.env.NEXT_PUBLIC_SUPABASE_URL
+    ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).origin
+    : "";
 
   const csp = [
     `default-src 'self'`,
@@ -37,7 +43,7 @@ export function middleware(request: NextRequest) {
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
     `img-src 'self' blob: data: https:`,
     `font-src 'self' https://fonts.gstatic.com`,
-    `connect-src 'self'`,
+    `connect-src 'self' ${supabaseOrigin}`.trim(),
     `upgrade-insecure-requests`,
   ].join("; ");
 
@@ -45,7 +51,35 @@ export function middleware(request: NextRequest) {
   requestHeaders.set("x-nonce", nonce);
   requestHeaders.set("Content-Security-Policy", csp);
 
-  const response = NextResponse.next({ request: { headers: requestHeaders } });
+  let response = NextResponse.next({ request: { headers: requestHeaders } });
+
+  // Refresh the Supabase session cookies so Server Components/route handlers
+  // see a current session. Reads request cookies, writes refreshed ones to the
+  // response while preserving the CSP/nonce request headers above.
+  if (supabaseOrigin) {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value),
+            );
+            response = NextResponse.next({ request: { headers: requestHeaders } });
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options),
+            );
+          },
+        },
+      },
+    );
+    await supabase.auth.getUser();
+  }
+
   response.headers.set("Content-Security-Policy", csp);
   return response;
 }

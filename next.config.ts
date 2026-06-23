@@ -17,6 +17,19 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  images: {
+    // Remote thumbnails for "Transmisiones Recientes" (filled by the n8n
+    // workflow). YouTube thumbs are stable & hotlinked; Instagram media URLs
+    // expire, so that branch re-hosts them in Supabase Storage (public bucket).
+    remotePatterns: [
+      { protocol: "https", hostname: "i.ytimg.com" },
+      {
+        protocol: "https",
+        hostname: "yczbxzpkhgexrhbtwobn.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

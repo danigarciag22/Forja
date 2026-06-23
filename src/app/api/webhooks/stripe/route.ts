@@ -4,6 +4,7 @@ import { getStripe } from "@/lib/stripe";
 import { orderFromSession } from "@/lib/orders-map";
 import { getProductIdBySlug, insertOrderIdempotent } from "@/lib/orders-repo";
 import { sendOrderConfirmation } from "@/lib/email";
+import { upsertSubscriptionFromStripe } from "@/lib/subscriptions-repo";
 
 export const runtime = "nodejs";
 
@@ -30,8 +31,22 @@ export async function POST(req: Request) {
   }
 
   try {
+    // Subscription lifecycle → entitlement row the mobile apps read.
+    if (
+      event.type === "customer.subscription.created" ||
+      event.type === "customer.subscription.updated" ||
+      event.type === "customer.subscription.deleted"
+    ) {
+      await upsertSubscriptionFromStripe(event.data.object as Stripe.Subscription);
+      return NextResponse.json({ received: true });
+    }
+
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
+      // Subscription checkouts are reconciled via customer.subscription.* events.
+      if (session.mode === "subscription") {
+        return NextResponse.json({ received: true });
+      }
       if (session.payment_status === "paid") {
         const slug = session.metadata?.slug ?? null;
         const productId = slug ? await getProductIdBySlug(slug) : null;
