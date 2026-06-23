@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { ProductPage } from "@/components/landing/ProductPage";
 import { getProductContent, listProductSlugs } from "@/content/products";
@@ -38,12 +39,17 @@ export default async function ProductoSlug({ params }: Params) {
   const content = getProductContent(slug);
   if (!content) notFound();
 
+  // CSP nonce (from middleware) so the JSON-LD scripts pass a strict policy.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  // Guard against an empty/missing gallery so the schema image never crashes.
+  const heroSrc = content.gallery?.[0]?.src ?? "";
+
   const productLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: content.title,
     description: content.description,
-    image: `${SITE_URL}${content.gallery[0].src}`,
+    image: `${SITE_URL}${heroSrc}`,
     brand: { "@type": "Brand", name: "FORJA" },
     offers: {
       "@type": "Offer",
@@ -73,13 +79,15 @@ export default async function ProductoSlug({ params }: Params) {
     <>
       <script
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{ __html: escapeJson(productLd) }}
       />
       <script
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{ __html: escapeJson(faqLd) }}
       />
-      <ProductPage content={content} />
+      <ProductPage key={content.slug} content={content} />
     </>
   );
 }

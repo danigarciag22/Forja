@@ -6,10 +6,19 @@ import {
   CheckoutValidationError,
 } from "@/lib/checkout";
 import { getProductBySlug } from "@/lib/orders-repo";
+import { isRateLimited, clientIp, RATE_RETRY_AFTER } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  // 0. Rate limit (unauthenticated public endpoint).
+  if (isRateLimited(`checkout:${clientIp(req)}`)) {
+    return NextResponse.json(
+      { error: "Demasiadas solicitudes" },
+      { status: 429, headers: { "Retry-After": String(RATE_RETRY_AFTER) } },
+    );
+  }
+
   // 1. Validate input.
   let slug: string;
   try {

@@ -12,6 +12,21 @@ type CheckoutButtonProps = {
   className?: string;
 };
 
+/** Only navigate to an https Stripe-hosted checkout URL (defense against an
+ *  unexpected/poisoned API response redirecting users off-site). */
+function isStripeCheckoutUrl(url: unknown): url is string {
+  if (typeof url !== "string") return false;
+  try {
+    const u = new URL(url);
+    return (
+      u.protocol === "https:" &&
+      (u.hostname === "checkout.stripe.com" || u.hostname.endsWith(".stripe.com"))
+    );
+  } catch {
+    return false;
+  }
+}
+
 /** Starts a Stripe Checkout session for the given product slug, then redirects. */
 export function CheckoutButton({
   slug,
@@ -35,7 +50,7 @@ export function CheckoutButton({
       });
       if (!res.ok) throw new Error(`checkout ${res.status}`);
       const data = (await res.json()) as { url?: string };
-      if (!data.url) throw new Error("missing checkout url");
+      if (!isStripeCheckoutUrl(data.url)) throw new Error("invalid checkout url");
       window.location.href = data.url;
     } catch {
       setError(true);

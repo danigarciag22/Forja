@@ -17,13 +17,39 @@ type CultModalProps = {
 export function CultModal({ open, onClose, code = "CULTO10" }: CultModalProps) {
   const [done, setDone] = useState(false);
   const firstRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
     setDone(false);
+    restoreFocusRef.current = document.activeElement as HTMLElement | null;
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      // Trap Tab within the dialog so keyboard users can't reach the page behind.
+      const root = dialogRef.current;
+      if (!root) return;
+      const focusable = root.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     document.addEventListener("keydown", onKey);
     const t = setTimeout(() => firstRef.current?.focus(), 30);
     const prev = document.body.style.overflow;
@@ -32,8 +58,16 @@ export function CultModal({ open, onClose, code = "CULTO10" }: CultModalProps) {
       document.removeEventListener("keydown", onKey);
       clearTimeout(t);
       document.body.style.overflow = prev;
+      // Restore focus to whatever opened the modal.
+      restoreFocusRef.current?.focus();
     };
   }, [open, onClose]);
+
+  // On the success transition, move focus to the success heading so screen
+  // readers (and keyboard users) land on the new content.
+  useEffect(() => {
+    if (open && done) successHeadingRef.current?.focus();
+  }, [open, done]);
 
   if (!open) return null;
 
@@ -45,6 +79,7 @@ export function CultModal({ open, onClose, code = "CULTO10" }: CultModalProps) {
       }}
     >
       <div
+        ref={dialogRef}
         className="forja-cult-modal"
         role="dialog"
         aria-modal="true"
@@ -119,9 +154,13 @@ export function CultModal({ open, onClose, code = "CULTO10" }: CultModalProps) {
                 </form>
               </>
             ) : (
-              <div className="forja-cult-success">
+              <div className="forja-cult-success" role="status" aria-live="polite">
                 <span className="forja-cult-success__stamp">Acceso concedido</span>
-                <h2 className="forja-cult-success__title">
+                <h2
+                  ref={successHeadingRef}
+                  tabIndex={-1}
+                  className="forja-cult-success__title"
+                >
                   Iniciación<br />completada
                 </h2>
                 <span className="forja-cult-success__rule" aria-hidden="true" />

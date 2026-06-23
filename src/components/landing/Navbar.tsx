@@ -11,9 +11,9 @@ export function Navbar() {
         FORJA<span className="lp-logo__dot" />
       </a>
       <nav className="lp-links">
-        <a href="/#comic">El Cómic</a>
-        <a href="/#arsenal">Arsenal</a>
-        <a href="/#comunidad">Comunidad</a>
+        <a href="/#apps">Apps</a>
+        <a href="/precios">Planes</a>
+        <a href="/cuenta">Cuenta</a>
       </nav>
       <div className="lp-nav__cta">
         <SpeechBubble inverted tilt={-2} onClick={openCult}>

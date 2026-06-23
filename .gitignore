@@ -31,3 +31,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# local tooling (not shipped)
+/.claude
+/n8n
